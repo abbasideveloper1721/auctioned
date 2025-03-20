@@ -1,9 +1,7 @@
-from django.shortcuts import render
+from rest_framework.viewsets import ModelViewSet
 from .models import Product
 from .serializers import ProductSerializer
-from rest_framework import viewsets
 
-class ProductView(viewsets.ModelViewSet):
-    queryset = Product.objects.all().order_by('bid_start_date')
+class ProductView(ModelViewSet):
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
-# Create your views here.
