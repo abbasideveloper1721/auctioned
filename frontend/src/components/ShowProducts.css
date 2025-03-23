@@ -1,0 +1,82 @@
+/* Container for all products */
+.products-container {
+    text-align: center;
+    padding: 20px;
+}
+
+/* Grid Layout for Cards */
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Individual Product Card */
+.product-card {
+    width: 230px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+/* Image Container: Takes Full Upper Space */
+.image-container {
+    width: 100%;
+    height: 180px; /* Fixed height to maintain layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f8f8;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Ensure Images Fit Without Stretching */
+.image-container img {
+    width: 100%;
+    height: auto; /* Maintains aspect ratio */
+    max-height: 100%; /* Ensures the image does not exceed container */
+    object-fit: contain; /* Prevents cropping while keeping full image visible */
+}
+
+/* Product Name Styling */
+.product-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+/* Time Left Field */
+.time-left {
+    font-size: 20px;
+    font-weight: bold;
+    color: red;
+    margin-bottom: 10px;
+}
+
+/* View Details Button */
+.view-details {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-top: auto; /* Ensures button stays at the bottom of the card */
+}
+
+.view-details:hover {
+    background: #0056b3;
+}
