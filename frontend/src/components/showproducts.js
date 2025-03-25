@@ -2,16 +2,50 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ShowProducts.css";
 
-const defaultImage = "https://via.placeholder.com/180x180?text=No+Image"; // Placeholder image for missing products
+const defaultImage = "https://via.placeholder.com/180x180?text=No+Image"; // Placeholder image
 
 const ShowProducts = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     axios.get("http://127.0.0.1:8000/api/") // Replace with actual API URL
-      .then((response) => setProducts(response.data))
+      .then((response) => {
+        const updatedProducts = response.data.map((product) => ({
+          ...product,
+          timeLeft: calculateTimeLeft(product.bid_end_date),
+        }));
+        setProducts(updatedProducts);
+      })
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProducts((prevProducts) =>
+        prevProducts.map((product) => ({
+          ...product,
+          timeLeft: calculateTimeLeft(product.bid_end_date),
+        }))
+      );
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const calculateTimeLeft = (endTime) => {
+    const now = new Date().getTime();
+    const end = new Date(endTime).getTime();
+    const difference = end - now;
+
+    if (difference > 0) {
+      const totalHours = Math.floor(difference / (1000 * 60 * 60)); // Get total hours
+      const minutes = Math.floor((difference / (1000 * 60)) % 60);
+      const seconds = Math.floor((difference / 1000) % 60);
+
+      return `${totalHours}:${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    }
+    return "00:00:00"; // Auction ended
+  };
 
   return (
     <div className="products-container">
@@ -23,11 +57,11 @@ const ShowProducts = () => {
               <img 
                 src={product.image || defaultImage} 
                 alt={product.name} 
-                onError={(e) => e.target.src = defaultImage} // If image fails to load, replace with default
+                onError={(e) => e.target.src = defaultImage} 
               />
             </div>
             <h3 className="product-name">{product.name}</h3>
-            <p className="time-left">⏳ <span>{product.time_left}</span></p>
+            <p className="time-left">⏳ <span>{product.timeLeft}</span></p>
             <p><strong>Category:</strong> {product.category}</p>
             <p><strong>Starting Bid:</strong> {product.starting_bid}</p>
             <button className="view-details">View Details</button>
